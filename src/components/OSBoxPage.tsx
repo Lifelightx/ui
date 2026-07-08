@@ -3,6 +3,7 @@ import './osbox/osbox.css';
 import { OSBoxPortal } from './osbox/OSBoxPortal';
 import { Desktop } from '../core/desktop/Desktop';
 import { themeActions } from '../core/store/themeStore';
+import { windowActions } from '../core/store/windowStore';
 
 export const OSBoxPage: React.FC = () => {
   const [currentSubRoute, setCurrentSubRoute] = useState(window.location.pathname);
@@ -14,6 +15,9 @@ export const OSBoxPage: React.FC = () => {
 
       // Sync root data-route attribute for cursor override stylesheets
       document.documentElement.setAttribute('data-route', path);
+
+      // Reset windows when switching OS environments
+      windowActions.clearWindows();
 
       // Update theme store if navigating to specific OS subroute
       if (path === '/osbox/macos') {

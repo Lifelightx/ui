@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { LogOut, HardDrive, Terminal, Cpu, Settings } from 'lucide-react';
 import { windowActions, windowStore } from '../../core/store/windowStore';
 import { useStore } from '../../core/store/index';
+import { OSIcon } from '../../components/osbox/OSIcon';
 
 interface WinThemeProps {
   onShutdown: () => void;
@@ -40,19 +40,19 @@ export const WinTheme: React.FC<WinThemeProps> = ({ onShutdown }) => {
             <span className="start-label">Pinned Apps</span>
             <div className="start-grid">
               <div onClick={() => handleStartAppClick('files', 'File Explorer')} className="start-app">
-                <HardDrive size={24} style={{ color: '#0078d7' }} />
+                <OSIcon app="files" os="windows" size={24} />
                 <span>File Explorer</span>
               </div>
               <div onClick={() => handleStartAppClick('terminal', 'Command Prompt')} className="start-app">
-                <Terminal size={24} style={{ color: '#66bb6a' }} />
+                <OSIcon app="terminal" os="windows" size={24} />
                 <span>CMD Terminal</span>
               </div>
               <div onClick={() => handleStartAppClick('vscode', 'VS Code')} className="start-app">
-                <Settings size={24} style={{ color: '#007acc' }} />
+                <OSIcon app="vscode" os="windows" size={24} />
                 <span>VS Code</span>
               </div>
               <div onClick={() => handleStartAppClick('settings', 'Settings')} className="start-app">
-                <Cpu size={24} style={{ color: '#8e8e93' }} />
+                <OSIcon app="settings" os="windows" size={24} />
                 <span>Settings</span>
               </div>
             </div>
@@ -63,8 +63,8 @@ export const WinTheme: React.FC<WinThemeProps> = ({ onShutdown }) => {
               <div className="user-avatar">A</div>
               <span>Administrator</span>
             </div>
-            <button onClick={onShutdown} className="start-shutdown font-sans">
-              <LogOut size={14} />
+            <button onClick={onShutdown} className="start-shutdown font-sans" style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+              <OSIcon app="shutdown" os="windows" size={14} />
               <span>Sign Out</span>
             </button>
           </div>
@@ -90,22 +90,22 @@ export const WinTheme: React.FC<WinThemeProps> = ({ onShutdown }) => {
           </button>
           
           <button onClick={() => windowActions.openWindow('files', 'File Explorer', 'folder')} className="taskbar-btn" title="File Explorer">
-            <HardDrive size={18} style={{ color: '#ffb300' }} />
+            <OSIcon app="files" os="windows" size={18} />
             {isWindowOpen('files') && <div className="win-running-bar" />}
           </button>
           
           <button onClick={() => windowActions.openWindow('terminal', 'Command Prompt', 'terminal')} className="taskbar-btn" title="Command Prompt">
-            <Terminal size={18} style={{ color: '#66bb6a' }} />
+            <OSIcon app="terminal" os="windows" size={18} />
             {isWindowOpen('terminal') && <div className="win-running-bar" />}
           </button>
           
           <button onClick={() => windowActions.openWindow('vscode', 'VS Code', 'vscode')} className="taskbar-btn" title="VS Code">
-            <Settings size={18} style={{ color: '#007acc' }} />
+            <OSIcon app="vscode" os="windows" size={18} />
             {isWindowOpen('vscode') && <div className="win-running-bar" />}
           </button>
 
           <button onClick={() => windowActions.openWindow('settings', 'Settings', 'settings')} className="taskbar-btn" title="Settings">
-            <Cpu size={18} style={{ color: '#8e8e93' }} />
+            <OSIcon app="settings" os="windows" size={18} />
             {isWindowOpen('settings') && <div className="win-running-bar" />}
           </button>
         </div>

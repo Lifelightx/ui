@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { HardDrive, Terminal, Cpu, Settings, FolderPlus, FilePlus } from 'lucide-react';
+import { FolderPlus, FilePlus } from 'lucide-react';
 import { useStore } from '../store/index';
 import { themeStore, themeActions } from '../store/themeStore';
 import { windowStore, windowActions } from '../store/windowStore';
 import { fsHelpers } from '../store/fileStore';
 import { Window } from '../window-manager/Window';
+import { OSIcon } from '../../components/osbox/OSIcon';
 
 // Import apps
 import { TerminalApp } from '../../apps/terminal/Terminal';
@@ -93,28 +94,28 @@ export const Desktop: React.FC = () => {
           onDoubleClick={() => windowActions.openWindow('files', getDesktopIconLabel(), 'folder')} 
           className="desktop-icon"
         >
-          <HardDrive size={34} style={{ color: currentOS === 'macos' ? '#00bcd4' : currentOS === 'windows' ? '#0078d7' : '#e95420' }} />
+          <OSIcon app="files" os={currentOS} size={36} />
           <span>{getDesktopIconLabel()}</span>
         </div>
         <div 
           onDoubleClick={() => windowActions.openWindow('terminal', getTerminalLabel(), 'terminal')} 
           className="desktop-icon"
         >
-          <Terminal size={34} style={{ color: '#ffffff' }} />
+          <OSIcon app="terminal" os={currentOS} size={36} />
           <span>{getTerminalLabel()}</span>
         </div>
         <div 
           onDoubleClick={() => windowActions.openWindow('vscode', 'VS Code', 'vscode')} 
           className="desktop-icon"
         >
-          <Settings size={34} style={{ color: '#007acc' }} />
+          <OSIcon app="vscode" os={currentOS} size={36} />
           <span>VS Code</span>
         </div>
         <div 
           onDoubleClick={() => windowActions.openWindow('settings', 'System Diagnostics', 'settings')} 
           className="desktop-icon"
         >
-          <Cpu size={34} style={{ color: currentOS === 'macos' ? '#ff9500' : currentOS === 'windows' ? '#4fc3f7' : '#34c759' }} />
+          <OSIcon app="settings" os={currentOS} size={36} />
           <span>Diagnostics</span>
         </div>
       </div>

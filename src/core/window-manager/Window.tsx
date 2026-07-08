@@ -1,5 +1,4 @@
-import React, { useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
 import { X, Minus, Square } from 'lucide-react';
 import { windowActions } from '../store/windowStore';
 import type { WindowInstance } from '../store/windowStore';
@@ -12,49 +11,34 @@ interface WindowProps {
 
 export const Window: React.FC<WindowProps> = ({ windowInfo, osType, children }) => {
   const { id, title, x, y, width, height, zIndex, minimized, maximized, focused } = windowInfo;
+  const [isDraggingOrResizing, setIsDraggingOrResizing] = useState(false);
   
-  const windowRef = useRef<HTMLDivElement>(null);
-  const posRef = useRef({ x, y });
-  const sizeRef = useRef({ w: width, h: height });
-
-  // Sync ref values when properties change externally
-  useEffect(() => {
-    posRef.current = { x, y };
-    sizeRef.current = { w: width, h: height };
-    if (windowRef.current && !maximized) {
-      windowRef.current.style.transform = `translate3d(${x}px, ${y}px, 0px)`;
-      windowRef.current.style.width = `${width}px`;
-      windowRef.current.style.height = `${height}px`;
-    }
-  }, [x, y, width, height, maximized]);
-
   if (minimized) return null;
 
   // Window drag handlers
   const handleDragStart = (e: React.MouseEvent) => {
+    e.preventDefault();
     if (maximized) return;
     windowActions.focusWindow(id);
+    setIsDraggingOrResizing(true);
 
     const startX = e.clientX;
     const startY = e.clientY;
-    const initialX = posRef.current.x;
-    const initialY = posRef.current.y;
+    const initialX = x;
+    const initialY = y;
 
     const onMouseMove = (moveEvent: MouseEvent) => {
       const deltaX = moveEvent.clientX - startX;
       const deltaY = moveEvent.clientY - startY;
       const nextX = initialX + deltaX;
-      // Constraint header below top bar (24px)
+      // Constraint header below top bar (28px)
       const nextY = Math.max(28, initialY + deltaY);
 
-      posRef.current = { x: nextX, y: nextY };
-      if (windowRef.current) {
-        windowRef.current.style.transform = `translate3d(${nextX}px, ${nextY}px, 0px)`;
-      }
+      windowActions.updateWindowPosition(id, nextX, nextY);
     };
 
     const onMouseUp = () => {
-      windowActions.updateWindowPosition(id, posRef.current.x, posRef.current.y);
+      setIsDraggingOrResizing(false);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
     };
@@ -65,13 +49,15 @@ export const Window: React.FC<WindowProps> = ({ windowInfo, osType, children }) 
 
   // Window resize handler
   const handleResizeStart = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     windowActions.focusWindow(id);
+    setIsDraggingOrResizing(true);
 
     const startX = e.clientX;
     const startY = e.clientY;
-    const initialW = sizeRef.current.w;
-    const initialH = sizeRef.current.h;
+    const initialW = width;
+    const initialH = height;
 
     const onMouseMove = (moveEvent: MouseEvent) => {
       const deltaX = moveEvent.clientX - startX;
@@ -79,15 +65,11 @@ export const Window: React.FC<WindowProps> = ({ windowInfo, osType, children }) 
       const nextW = Math.max(280, initialW + deltaX);
       const nextH = Math.max(200, initialH + deltaY);
 
-      sizeRef.current = { w: nextW, h: nextH };
-      if (windowRef.current) {
-        windowRef.current.style.width = `${nextW}px`;
-        windowRef.current.style.height = `${nextH}px`;
-      }
+      windowActions.updateWindowSize(id, nextW, nextH);
     };
 
     const onMouseUp = () => {
-      windowActions.updateWindowSize(id, sizeRef.current.w, sizeRef.current.h);
+      setIsDraggingOrResizing(false);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseup', onMouseUp);
     };
@@ -105,7 +87,6 @@ export const Window: React.FC<WindowProps> = ({ windowInfo, osType, children }) 
         width: osType === 'ubuntu' ? 'calc(100vw - 64px)' : '100vw',
         height: `calc(100vh - ${osType === 'macos' ? '92px' : osType === 'ubuntu' ? '28px' : '48px'})`,
         zIndex,
-        transform: 'none'
       }
     : {
         position: 'absolute',
@@ -130,15 +111,10 @@ export const Window: React.FC<WindowProps> = ({ windowInfo, osType, children }) 
   };
 
   return (
-    <motion.div
-      ref={windowRef}
-      className={`${getWindowThemeClass()} ${focused ? 'focused-win' : ''} ${maximized ? 'maximized' : ''}`}
+    <div
+      className={`window-panel-container ${getWindowThemeClass()} ${focused ? 'focused-win' : ''} ${maximized ? 'maximized' : ''} ${isDraggingOrResizing ? 'dragging' : ''} window-animate-in`}
       style={windowStyle}
       onClick={() => windowActions.focusWindow(id)}
-      initial={{ scale: 0.95, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      exit={{ scale: 0.95, opacity: 0 }}
-      transition={{ duration: 0.15, ease: 'easeOut' }}
     >
       {/* WINDOW TITLE BAR */}
       <div className={getTitlebarClass()} onMouseDown={handleDragStart}>
@@ -236,7 +212,7 @@ export const Window: React.FC<WindowProps> = ({ windowInfo, osType, children }) 
           }}
         />
       )}
-    </motion.div>
+    </div>
   );
 };
 export default Window;

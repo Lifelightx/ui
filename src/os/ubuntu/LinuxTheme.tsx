@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { LogOut, HardDrive, Terminal, Cpu, Settings } from 'lucide-react';
 import { windowActions, windowStore } from '../../core/store/windowStore';
 import { useStore } from '../../core/store/index';
+import { OSIcon } from '../../components/osbox/OSIcon';
 
 interface LinuxThemeProps {
   onShutdown: () => void;
@@ -39,7 +39,8 @@ export const LinuxTheme: React.FC<LinuxThemeProps> = ({ onShutdown }) => {
         <span>{currentTime}</span>
         <div className="linux-top-right">
           <span>📶 🔊 🔋</span>
-          <button onClick={onShutdown} className="linux-shutdown-trigger font-sans" style={{ background: 'none', border: 'none', padding: 0, color: '#df4a16', cursor: 'pointer' }}>
+          <button onClick={onShutdown} className="linux-shutdown-trigger font-sans" style={{ background: 'none', border: 'none', padding: 0, color: '#df4a16', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <OSIcon app="shutdown" os="ubuntu" size={12} />
             <span>Power Off</span>
           </button>
         </div>
@@ -56,28 +57,28 @@ export const LinuxTheme: React.FC<LinuxThemeProps> = ({ onShutdown }) => {
           </button>
 
           <button onClick={() => windowActions.openWindow('files', 'Files', 'folder')} className="linux-dock-icon" title="Files">
-            <HardDrive size={22} style={{ color: '#e95420' }} />
+            <OSIcon app="files" os="ubuntu" size={22} />
             {isWindowOpen('files') && <div className="linux-active-dot" />}
           </button>
 
           <button onClick={() => windowActions.openWindow('terminal', 'Terminal', 'terminal')} className="linux-dock-icon" title="Terminal">
-            <Terminal size={22} style={{ color: '#fff' }} />
+            <OSIcon app="terminal" os="ubuntu" size={22} />
             {isWindowOpen('terminal') && <div className="linux-active-dot" />}
           </button>
 
           <button onClick={() => windowActions.openWindow('vscode', 'VS Code', 'vscode')} className="linux-dock-icon" title="VS Code">
-            <Settings size={22} style={{ color: '#007acc' }} />
+            <OSIcon app="vscode" os="ubuntu" size={22} />
             {isWindowOpen('vscode') && <div className="linux-active-dot" />}
           </button>
 
           <button onClick={() => windowActions.openWindow('settings', 'Settings', 'settings')} className="linux-dock-icon" title="Settings">
-            <Cpu size={22} style={{ color: '#34c759' }} />
+            <OSIcon app="settings" os="ubuntu" size={22} />
             {isWindowOpen('settings') && <div className="linux-active-dot" />}
           </button>
 
           <div className="dock-spacer" />
           <button onClick={onShutdown} className="linux-dock-icon" title="Power Off">
-            <LogOut size={22} style={{ color: '#ef4444' }} />
+            <OSIcon app="shutdown" os="ubuntu" size={22} />
           </button>
         </div>
       </div>
@@ -90,19 +91,19 @@ export const LinuxTheme: React.FC<LinuxThemeProps> = ({ onShutdown }) => {
           </div>
           <div className="menu-apps-grid">
             <div onClick={() => handleAppLaunch('files', 'Files')} className="menu-app-item">
-              <HardDrive size={32} style={{ color: '#e95420' }} />
+              <OSIcon app="files" os="ubuntu" size={32} />
               <span>Files</span>
             </div>
             <div onClick={() => handleAppLaunch('terminal', 'Terminal')} className="menu-app-item">
-              <Terminal size={32} style={{ color: '#fff' }} />
+              <OSIcon app="terminal" os="ubuntu" size={32} />
               <span>Terminal</span>
             </div>
             <div onClick={() => handleAppLaunch('vscode', 'VS Code')} className="menu-app-item">
-              <Settings size={32} style={{ color: '#007acc' }} />
+              <OSIcon app="vscode" os="ubuntu" size={32} />
               <span>VS Code</span>
             </div>
             <div onClick={() => handleAppLaunch('settings', 'Settings')} className="menu-app-item">
-              <Cpu size={32} style={{ color: '#34c759' }} />
+              <OSIcon app="settings" os="ubuntu" size={32} />
               <span>Settings</span>
             </div>
           </div>

@@ -1,7 +1,7 @@
 import React from 'react';
-import { LogOut, HardDrive, Terminal, Cpu, Settings } from 'lucide-react';
 import { windowActions, windowStore } from '../../core/store/windowStore';
 import { useStore } from '../../core/store/index';
+import { OSIcon } from '../../components/osbox/OSIcon';
 
 interface MacThemeProps {
   onShutdown: () => void;
@@ -32,39 +32,39 @@ export const MacTheme: React.FC<MacThemeProps> = ({ onShutdown }) => {
           <span className="desktop-menu-item">Window</span>
           <span className="desktop-menu-item">Help</span>
         </div>
-
+ 
         <div className="top-bar-right">
           <span className="desktop-menu-item">100% 🔋</span>
           <span className="desktop-menu-item">Wed 11:15 PM</span>
-          <button onClick={onShutdown} className="mac-shutdown-trigger font-sans" style={{ background: 'none', border: 'none', padding: 0 }}>
-            <LogOut size={12} />
+          <button onClick={onShutdown} className="mac-shutdown-trigger font-sans" style={{ background: 'none', border: 'none', padding: 0, display: 'flex', alignItems: 'center', gap: '6px', color: '#ff3b30', fontWeight: 500, cursor: 'pointer' }}>
+            <OSIcon app="shutdown" os="macos" size={14} />
             <span>Shut Down</span>
           </button>
         </div>
       </div>
-
+ 
       {/* Magnification Shelf Dock */}
       <div className="mac-dock-shelf">
         <div className="mac-dock-container">
           <div onClick={() => windowActions.openWindow('files', 'Finder', 'folder')} className="dock-icon" title="Finder">
-            <HardDrive size={30} style={{ color: '#5ac8fa' }} />
+            <OSIcon app="files" os="macos" size={30} />
             {isWindowOpen('files') && <div className="dock-active-dot" />}
           </div>
           <div onClick={() => windowActions.openWindow('terminal', 'zsh Terminal', 'terminal')} className="dock-icon" title="Terminal">
-            <Terminal size={30} style={{ color: '#ffffff' }} />
+            <OSIcon app="terminal" os="macos" size={30} />
             {isWindowOpen('terminal') && <div className="dock-active-dot" />}
           </div>
           <div onClick={() => windowActions.openWindow('vscode', 'VS Code', 'vscode')} className="dock-icon" title="VS Code">
-            <Settings size={30} style={{ color: '#007acc' }} />
+            <OSIcon app="vscode" os="macos" size={30} />
             {isWindowOpen('vscode') && <div className="dock-active-dot" />}
           </div>
           <div onClick={() => windowActions.openWindow('settings', 'System Settings', 'settings')} className="dock-icon" title="System Settings">
-            <Cpu size={30} style={{ color: '#8e8e93' }} />
+            <OSIcon app="settings" os="macos" size={30} />
             {isWindowOpen('settings') && <div className="dock-active-dot" />}
           </div>
           <div className="dock-divider" />
           <div onClick={onShutdown} className="dock-icon" title="Shut Down">
-            <LogOut size={30} style={{ color: '#ff3b30' }} />
+            <OSIcon app="shutdown" os="macos" size={30} />
           </div>
         </div>
       </div>

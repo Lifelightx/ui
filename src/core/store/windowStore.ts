@@ -116,5 +116,12 @@ export const windowActions = {
     windowStore.setState({
       windows: state.windows.map((w) => (w.id === id ? { ...w, width, height } : w))
     });
+  },
+
+  clearWindows: () => {
+    windowStore.setState({
+      windows: [],
+      maxZIndex: 10
+    });
   }
 };
